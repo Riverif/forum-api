@@ -32,7 +32,7 @@ describe("CreatedThread Entities", () => {
     const payload = {
       id: "thread-123",
       title: "Sebuah judul",
-      owner: "user-123",
+      owner: "owner-123",
     };
 
     //Action & Assert
