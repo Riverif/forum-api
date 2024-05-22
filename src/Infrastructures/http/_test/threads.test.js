@@ -1,7 +1,9 @@
-const pool = require("../../database/postgres/pool");
 const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
 const AuthenticationsTableTestHelper = require("../../../../tests/AuthenticationsTableTestHelper");
 const ThreadsTableTestHelper = require("../../../../tests/ThreadsTableTestHelper");
+const CommentsTableTestHelper = require("../../../../tests/CommentsTableTestHelper");
+
+const pool = require("../../database/postgres/pool");
 const container = require("../../container");
 const createServer = require("../createServer");
 
@@ -14,6 +16,7 @@ describe("/threads endpoint", () => {
     await UsersTableTestHelper.cleanTable();
     await AuthenticationsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
   });
 
   describe("when POST /threads", () => {
@@ -200,6 +203,42 @@ describe("/threads endpoint", () => {
       expect(responseJson.message).toEqual(
         "tidak dapat membuat thread baru karena tipe data tidak sesuai",
       );
+    });
+  });
+
+  describe("when GET /threads/{threadId}", () => {
+    it("should response 201 and persisted detail thread", async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      /** add new user */
+      await UsersTableTestHelper.addUser({ username: "dicoding" });
+      await UsersTableTestHelper.addUser({ id: "user-124", username: "john" });
+      /** add new thread */
+      await ThreadsTableTestHelper.addThread({ id: "thread-123" });
+      /** add new comment */
+      await CommentsTableTestHelper.addComment({
+        id: "comment-123",
+        content: "komentar 1",
+      });
+      await CommentsTableTestHelper.addComment({
+        id: "comment-124",
+        owner: "user-124",
+        content: "komentar 2",
+      });
+
+      // Action
+      const response = await server.inject({
+        method: "GET",
+        url: "/threads/thread-123",
+        payload: "",
+      });
+
+      //Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual("success");
+      expect(responseJson.data.thread).toBeDefined();
     });
   });
 });

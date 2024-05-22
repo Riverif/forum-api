@@ -339,4 +339,155 @@ describe("/threads endpoint", () => {
       expect(responseJson.message).toEqual("thread tidak ditemukan");
     });
   });
+
+  describe("when POST /threads/{threadId}/comments/{commentId}", () => {
+    it("should response 200", async () => {
+      //Arrange
+      const server = await createServer(container);
+
+      // Add user account
+      await server.inject({
+        method: "POST",
+        url: "/users",
+        payload: {
+          username: "dicoding",
+          password: "secret",
+          fullname: "Dicoding Indonesia",
+        },
+      });
+
+      // login
+      const auth = await server.inject({
+        method: "POST",
+        url: "/authentications",
+        payload: {
+          username: "dicoding",
+          password: "secret",
+        },
+      });
+
+      const {
+        data: { accessToken },
+      } = JSON.parse(auth.payload);
+
+      const thread = await server.inject({
+        method: "POST",
+        url: "/threads",
+        payload: {
+          title: "First Thread",
+          body: "This is first thread",
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const {
+        data: { addedThread },
+      } = JSON.parse(thread.payload);
+
+      const comment = await server.inject({
+        method: "POST",
+        url: `/threads/${addedThread.id}/comments`,
+        payload: { content: "This is comment" },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const {
+        data: { addedComment },
+      } = JSON.parse(comment.payload);
+
+      //Action
+      const response = await server.inject({
+        method: "DELETE",
+        url: `/threads/${addedThread.id}/comments/${addedComment.id}`,
+        payload: { content: "This is comment" },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      //Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual("success");
+    });
+
+    it("should response 404 when comment not found", async () => {
+      //Arrange
+      const server = await createServer(container);
+
+      // Add user account
+      await server.inject({
+        method: "POST",
+        url: "/users",
+        payload: {
+          username: "dicoding",
+          password: "secret",
+          fullname: "Dicoding Indonesia",
+        },
+      });
+
+      // login
+      const auth = await server.inject({
+        method: "POST",
+        url: "/authentications",
+        payload: {
+          username: "dicoding",
+          password: "secret",
+        },
+      });
+
+      const {
+        data: { accessToken },
+      } = JSON.parse(auth.payload);
+
+      const thread = await server.inject({
+        method: "POST",
+        url: "/threads",
+        payload: {
+          title: "First Thread",
+          body: "This is first thread",
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const {
+        data: { addedThread },
+      } = JSON.parse(thread.payload);
+
+      const comment = await server.inject({
+        method: "POST",
+        url: `/threads/${addedThread.id}/comments`,
+        payload: { content: "This is comment" },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const {
+        data: { addedComment },
+      } = JSON.parse(comment.payload);
+
+      //Action
+      const response = await server.inject({
+        method: "DELETE",
+        url: `/threads/${addedThread.id}/comments/xxx`,
+        payload: { content: "This is comment" },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      //Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual("fail");
+      expect(responseJson.message).toEqual("comment tidak ditemukan");
+    });
+  });
 });
