@@ -17,7 +17,7 @@ describe("CreateThread Entities", () => {
     //Arrange
     const payload = {
       title: 123,
-      body: "BodyThread",
+      body: {},
     };
 
     //Action & Assert
