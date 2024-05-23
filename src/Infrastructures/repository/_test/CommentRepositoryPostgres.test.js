@@ -5,6 +5,7 @@ const pool = require("../../database/postgres/pool");
 
 const NewComment = require("../../../Domains/comments/entities/NewComment");
 const AddedComment = require("../../../Domains/comments/entities/AddedComment");
+const DetailsComments = require("../../../Domains/comments/entities/DetailsComments");
 const CommentRepositoryPostgres = require("../CommentRepositoryPostgres");
 const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require("../../../Commons/exceptions/AuthorizationError");
@@ -190,6 +191,56 @@ describe("CommentRepositoryPostgres", () => {
       );
 
       expect(comment[0].is_delete).toEqual(true);
+    });
+  });
+
+  describe("getCommentsByThreadId function", () => {
+    it("should return details comments correctly", async () => {
+      //Arrange
+      /** add new user */
+      await UsersTableTestHelper.addUser({ username: "dicoding" });
+      await UsersTableTestHelper.addUser({ id: "user-124", username: "john" });
+      /** add new thread */
+      await ThreadsTableTestHelper.addThread({ id: "thread-123" });
+      /** add new comment */
+      await CommentsTableTestHelper.addComment({
+        id: "comment-123",
+        content: "komentar 1",
+      });
+      await CommentsTableTestHelper.addComment({
+        id: "comment-124",
+        owner: "user-124",
+        content: "komentar 2",
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
+
+      //Action
+      const comments = await commentRepositoryPostgres.getCommentsByThreadId(
+        "thread-123",
+      );
+
+      //Assert
+      expect(comments).toStrictEqual(
+        new DetailsComments([
+          {
+            id: "comment-123",
+            thread: "thread-123",
+            owner: "user-123",
+            date: "2024-05-21T12:25:49.169Z",
+            content: "komentar 1",
+            isDelete: false,
+          },
+          {
+            id: "comment-124",
+            thread: "thread-123",
+            owner: "user-124",
+            date: "2024-05-21T12:25:49.169Z",
+            content: "komentar 2",
+            isDelete: false,
+          },
+        ]),
+      );
     });
   });
 });

@@ -11,6 +11,9 @@ class CommentRepository {
   async checkCommentOwnership(commentId, ownerId) {
     throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
+  async getCommentsByThreadId(commentId, ownerId) {
+    throw new Error("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+  }
 }
 
 module.exports = CommentRepository;

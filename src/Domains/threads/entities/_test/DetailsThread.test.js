@@ -17,26 +17,26 @@ describe("DetailsThread Entities", () => {
     //Arrange
     const payload = {
       id: 123,
+      owner: 123,
       title: {},
       body: "BodyThread",
       date: "ds",
-      username: 123,
-      comments: [
-        {
-          id: "comment-123",
-          username: "john",
-          date: "2021-08-08T07:22:33.555Z",
-          content: "sebuah comment",
-          isDelete: false,
-        },
-        {
-          id: "comment-yksuCoxM2s4MMrZJO-qVD",
-          username: "dicoding",
-          date: "2021-08-08T07:26:21.338Z",
-          content: "sebuah comment 2",
-          isDelete: true,
-        },
-      ],
+      // comments: [
+      //   {
+      //     id: "comment-123",
+      //     username: "john",
+      //     date: "2021-08-08T07:22:33.555Z",
+      //     content: "sebuah comment",
+      //     isDelete: false,
+      //   },
+      //   {
+      //     id: "comment-yksuCoxM2s4MMrZJO-qVD",
+      //     username: "dicoding",
+      //     date: "2021-08-08T07:26:21.338Z",
+      //     content: "sebuah comment 2",
+      //     isDelete: true,
+      //   },
+      // ],
     };
 
     //Action & Assert
@@ -49,52 +49,36 @@ describe("DetailsThread Entities", () => {
     //Arrange
     const payload = {
       id: "thread-123",
+      owner: "user-123",
       title: "This is title",
       body: "This is body",
       date: "date",
-      username: "dicoding",
-      comments: [
-        {
-          id: "comment-123",
-          username: "john",
-          date: "2021-08-08T07:22:33.555Z",
-          content: "sebuah comment",
-          isDelete: false,
-        },
-        {
-          id: "comment-yksuCoxM2s4MMrZJO-qVD",
-          username: "dicoding",
-          date: "2021-08-08T07:26:21.338Z",
-          content: "sebuah comment 2",
-          isDelete: true,
-        },
-      ],
+      // comments: [
+      //   {
+      //     id: "comment-123",
+      //     username: "john",
+      //     date: "2021-08-08T07:22:33.555Z",
+      //     content: "sebuah comment",
+      //     isDelete: false,
+      //   },
+      //   {
+      //     id: "comment-yksuCoxM2s4MMrZJO-qVD",
+      //     username: "dicoding",
+      //     date: "2021-08-08T07:26:21.338Z",
+      //     content: "sebuah comment 2",
+      //     isDelete: true,
+      //   },
+      // ],
     };
 
     //Action & Assert
-    const { id, title, body, date, username, comments } = new DetailsThread(
-      payload,
-    );
+    const { id, owner, title, body, date } = new DetailsThread(payload);
 
     //Assert
     expect(id).toEqual(payload.id);
+    expect(owner).toEqual(payload.owner);
     expect(title).toEqual(payload.title);
     expect(body).toEqual(payload.body);
     expect(date).toEqual(payload.date);
-    expect(username).toEqual(payload.username);
-    expect(comments).toEqual([
-      {
-        id: "comment-123",
-        username: "john",
-        date: "2021-08-08T07:22:33.555Z",
-        content: "sebuah comment",
-      },
-      {
-        id: "comment-yksuCoxM2s4MMrZJO-qVD",
-        username: "dicoding",
-        date: "2021-08-08T07:26:21.338Z",
-        content: "**komentar telah dihapus**",
-      },
-    ]);
   });
 });

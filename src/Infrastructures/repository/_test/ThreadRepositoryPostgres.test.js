@@ -126,16 +126,6 @@ describe("ThreadRepositoryPostgres", () => {
       await UsersTableTestHelper.addUser({ id: "user-124", username: "john" });
       /** add new thread */
       await ThreadsTableTestHelper.addThread({ id: "thread-123" });
-      /** add new comment */
-      await CommentsTableTestHelper.addComment({
-        id: "comment-123",
-        content: "komentar 1",
-      });
-      await CommentsTableTestHelper.addComment({
-        id: "comment-124",
-        owner: "user-124",
-        content: "komentar 2",
-      });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool);
 
@@ -143,27 +133,15 @@ describe("ThreadRepositoryPostgres", () => {
       const thread = await threadRepositoryPostgres.getThreadById("thread-123");
 
       //Assert
-      expect(thread).toEqual({
-        id: "thread-123",
-        title: "Ini judul thread",
-        body: "Ini body thread",
-        date: "2024-05-21T12:25:49.169Z",
-        username: "dicoding",
-        comments: [
-          {
-            id: "comment-123",
-            username: "dicoding",
-            date: "2024-05-21T12:25:49.169Z",
-            content: "komentar 1",
-          },
-          {
-            id: "comment-124",
-            username: "john",
-            date: "2024-05-21T12:25:49.169Z",
-            content: "komentar 2",
-          },
-        ],
-      });
+      expect(thread).toStrictEqual(
+        new DetailsThread({
+          id: "thread-123",
+          owner: "user-123",
+          title: "Ini judul thread",
+          body: "Ini body thread",
+          date: "2024-05-21T12:25:49.169Z",
+        }),
+      );
     });
   });
 });
