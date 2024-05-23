@@ -143,29 +143,27 @@ describe("ThreadRepositoryPostgres", () => {
       const thread = await threadRepositoryPostgres.getThreadById("thread-123");
 
       //Assert
-      expect(thread).toStrictEqual(
-        new DetailsThread({
-          id: "thread-123",
-          title: "Ini judul thread",
-          body: "Ini body thread",
-          date: "2024-05-21T12:25:49.169Z",
-          username: "dicoding",
-          comments: [
-            {
-              id: "comment-123",
-              username: "dicoding",
-              date: "2024-05-21T12:25:49.169Z",
-              content: "komentar 1",
-            },
-            {
-              id: "comment-124",
-              username: "john",
-              date: "2024-05-21T12:25:49.169Z",
-              content: "komentar 2",
-            },
-          ],
-        }),
-      );
+      expect(thread).toEqual({
+        id: "thread-123",
+        title: "Ini judul thread",
+        body: "Ini body thread",
+        date: "2024-05-21T12:25:49.169Z",
+        username: "dicoding",
+        comments: [
+          {
+            id: "comment-123",
+            username: "dicoding",
+            date: "2024-05-21T12:25:49.169Z",
+            content: "komentar 1",
+          },
+          {
+            id: "comment-124",
+            username: "john",
+            date: "2024-05-21T12:25:49.169Z",
+            content: "komentar 2",
+          },
+        ],
+      });
     });
   });
 });

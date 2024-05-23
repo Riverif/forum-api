@@ -21,7 +21,22 @@ describe("DetailsThread Entities", () => {
       body: "BodyThread",
       date: "ds",
       username: 123,
-      comments: [123, 123],
+      comments: [
+        {
+          id: "comment-123",
+          username: "john",
+          date: "2021-08-08T07:22:33.555Z",
+          content: "sebuah comment",
+          isDelete: false,
+        },
+        {
+          id: "comment-yksuCoxM2s4MMrZJO-qVD",
+          username: "dicoding",
+          date: "2021-08-08T07:26:21.338Z",
+          content: "sebuah comment 2",
+          isDelete: true,
+        },
+      ],
     };
 
     //Action & Assert
@@ -44,12 +59,14 @@ describe("DetailsThread Entities", () => {
           username: "john",
           date: "2021-08-08T07:22:33.555Z",
           content: "sebuah comment",
+          isDelete: false,
         },
         {
           id: "comment-yksuCoxM2s4MMrZJO-qVD",
           username: "dicoding",
           date: "2021-08-08T07:26:21.338Z",
-          content: "**komentar telah dihapus**",
+          content: "sebuah comment 2",
+          isDelete: true,
         },
       ],
     };
@@ -65,6 +82,19 @@ describe("DetailsThread Entities", () => {
     expect(body).toEqual(payload.body);
     expect(date).toEqual(payload.date);
     expect(username).toEqual(payload.username);
-    expect(comments).toEqual(payload.comments);
+    expect(comments).toEqual([
+      {
+        id: "comment-123",
+        username: "john",
+        date: "2021-08-08T07:22:33.555Z",
+        content: "sebuah comment",
+      },
+      {
+        id: "comment-yksuCoxM2s4MMrZJO-qVD",
+        username: "dicoding",
+        date: "2021-08-08T07:26:21.338Z",
+        content: "**komentar telah dihapus**",
+      },
+    ]);
   });
 });

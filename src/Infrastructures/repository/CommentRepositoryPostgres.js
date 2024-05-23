@@ -39,6 +39,16 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (result.rows.length === 0) {
       throw new NotFoundError("comment tidak ditemukan");
     }
+  }
+
+  async checkCommentOwnership(commentId, ownerId) {
+    const query = {
+      text: "SELECT * FROM comments WHERE id = $1",
+      values: [commentId],
+    };
+
+    const result = await this._pool.query(query);
+
     if (result.rows[0].owner !== ownerId) {
       throw new AuthorizationError("anda bukan pemilik comment");
     }

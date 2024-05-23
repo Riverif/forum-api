@@ -14,6 +14,9 @@ describe("DeleteCommentUseCase", () => {
     mockCommentRepository.checkCommentById = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.checkCommentOwnership = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
     mockCommentRepository.deleteComment = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
@@ -27,6 +30,14 @@ describe("DeleteCommentUseCase", () => {
     await deleteCommentUseCase.execute(useCaseCommentId, useCaseCredential);
 
     //Assert
+    expect(mockCommentRepository.checkCommentOwnership).toBeCalledWith(
+      useCaseCommentId,
+      useCaseCredential,
+    );
+    expect(mockCommentRepository.checkCommentById).toBeCalledWith(
+      useCaseCommentId,
+      useCaseCredential,
+    );
     expect(mockCommentRepository.deleteComment).toBeCalledWith(
       useCaseCommentId,
     );

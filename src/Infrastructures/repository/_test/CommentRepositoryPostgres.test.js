@@ -124,7 +124,9 @@ describe("CommentRepositoryPostgres", () => {
         commentRepository.checkCommentById(addedComment.id, addedComment.owner),
       ).resolves.not.toThrow(NotFoundError);
     });
+  });
 
+  describe("checkCommentOwnership function", () => {
     it("should throw AuthorizationError if not the owner of comment", async () => {
       //Arrange
       const newComment = new NewComment({
@@ -150,7 +152,7 @@ describe("CommentRepositoryPostgres", () => {
 
       //Action & Assert
       await expect(
-        commentRepository.checkCommentById(addedComment.id, "xxx"),
+        commentRepository.checkCommentOwnership(addedComment.id, "xxx"),
       ).rejects.toThrow(AuthorizationError);
     });
   });

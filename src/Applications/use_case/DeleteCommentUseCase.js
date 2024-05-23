@@ -4,7 +4,13 @@ class DeleteCommentUseCase {
   }
 
   async execute(useCaseCommentId, useCaseCredential) {
+    //check availability of comment
     await this._commentRepository.checkCommentById(
+      useCaseCommentId,
+      useCaseCredential,
+    );
+    //check ownership of comment
+    await this._commentRepository.checkCommentOwnership(
       useCaseCommentId,
       useCaseCredential,
     );

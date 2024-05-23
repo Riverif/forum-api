@@ -15,5 +15,8 @@ describe("CommentRepository interface", () => {
     await expect(commentRepository.checkCommentById("")).rejects.toThrowError(
       "COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED",
     );
+    await expect(
+      commentRepository.checkCommentOwnership(""),
+    ).rejects.toThrowError("COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   });
 });
