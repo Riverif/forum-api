@@ -52,6 +52,9 @@ describe("AddCommentUseCase", () => {
       }),
     );
 
+    expect(mockThreadRepository.checkAvailabilityThread).toBeCalledWith(
+      useCaseThread,
+    );
     expect(mockCommentRepository.addComment).toBeCalledWith(
       new NewComment({
         content: useCasePayload.content,

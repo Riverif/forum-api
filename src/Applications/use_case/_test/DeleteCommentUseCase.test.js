@@ -3,14 +3,12 @@ const DeleteCommentUseCase = require("../DeleteCommentUseCase");
 
 describe("DeleteCommentUseCase", () => {
   it("should orchestrating the delete user action correctly", async () => {
-    //Arranger
-
+    //Arrange
     const useCaseCredential = "user-123";
     const useCaseCommentId = "comment-123";
 
     /** creating dependency of use case */
     const mockCommentRepository = new CommentRepository();
-
     mockCommentRepository.checkCommentById = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
