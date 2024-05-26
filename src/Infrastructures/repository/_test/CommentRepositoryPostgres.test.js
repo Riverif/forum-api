@@ -156,6 +156,35 @@ describe("CommentRepositoryPostgres", () => {
         commentRepository.checkCommentOwnership(addedComment.id, "xxx"),
       ).rejects.toThrow(AuthorizationError);
     });
+
+    it("should not throw AuthorizationError if the owner of comment", async () => {
+      //Arrange
+      const newComment = new NewComment({
+        content: "This is comment",
+      });
+
+      await UsersTableTestHelper.addUser({ username: "dicoding" });
+      await ThreadsTableTestHelper.addThread({ id: "thread-123" });
+
+      const fakeIdGenerator = () => 123;
+      const thread = "thread-123";
+      const owner = "user-123";
+
+      const commentRepository = new CommentRepositoryPostgres(
+        pool,
+        fakeIdGenerator,
+      );
+      const addedComment = await commentRepository.addComment(
+        newComment,
+        thread,
+        owner,
+      );
+
+      //Action & Assert
+      await expect(
+        commentRepository.checkCommentOwnership(addedComment.id, "user-123"),
+      ).resolves.not.toThrow(AuthorizationError);
+    });
   });
 
   describe("deleteComment function", () => {
